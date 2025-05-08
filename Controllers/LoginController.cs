@@ -52,11 +52,46 @@ namespace Proyecto_Microservicios_Asp_Net.Controllers
                 Audience = _configuration["Jwt:Audience"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+            var logEntry = new LogManualUsers
+            {
+                UsuarioId = user.UsuarioId,
+                LoginDate = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            _context.LogManualUsers.Add(logEntry);
+            await _context.SaveChangesAsync();
+
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
             return Ok(new { token = tokenString });
+
         }
+
+        [HttpGet("logged-users")]
+        public async Task<IActionResult> GetLoggedUsers()
+        {
+            var loggedUsers = await _context.LogManualUsers
+       .Where(l => l.IsActive)
+       .Join(_context.Usuarios,
+           log => log.UsuarioId,
+           user => user.Id,
+           (log, user) => new
+           {
+               log.Id,
+               log.LoginDate,
+               user.nombre,
+               user.apellido,
+               user.email,
+               user.telefono
+           })
+       .ToListAsync();
+
+            return Ok(loggedUsers);
+
+        }
+
     }
 }
