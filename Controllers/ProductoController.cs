@@ -154,6 +154,7 @@ namespace Proyecto_Microservicios_Asp_Net.Controllers
                     Categoria = p.Categoria.Nombre
                 })
                 .ToListAsync();
+            
 
             return Ok(productos);
         }
@@ -166,6 +167,7 @@ namespace Proyecto_Microservicios_Asp_Net.Controllers
                 p.descripcion.ToLower().Contains(termino.ToLower()))
                 .Include(p => p.Categoria)
                 .ToListAsync();
+        
 
             if (productos == null || productos.Count == 0)
             {

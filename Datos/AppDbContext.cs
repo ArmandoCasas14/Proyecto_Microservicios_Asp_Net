@@ -46,6 +46,8 @@ namespace Proyecto_Microservicios_Asp_Net.Datos
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<LogUsers> LogUsuarios { get; set; }
+        public DbSet<LogCategory> LogCategorias { get; set; }
 
     }
 }
